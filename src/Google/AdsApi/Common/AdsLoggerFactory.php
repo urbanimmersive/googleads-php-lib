@@ -17,7 +17,7 @@
 
 namespace Google\AdsApi\Common;
 
-use Monolog\Handler\StreamHandler;
+use Monolog\Handler\SyslogHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 
@@ -40,9 +40,10 @@ final class AdsLoggerFactory
      */
     public function createLogger($channel, $stream = null, $level = null)
     {
-        $stream = $stream === null ? fopen('php://stderr', 'w') : $stream;
-        $level = $level === null ? Logger::INFO : $level;
-        $handler = new StreamHandler($stream, $level);
+        //$stream = $stream === null ? fopen('php://stderr', 'w') : $stream;
+        //$level = $level === null ? Logger::INFO : $level;
+        // Fix for Google App Engine
+        $handler = new SyslogHandler('app');
         $handler->getFormatter()
             ->ignoreEmptyContextAndExtra();
         $handler->getFormatter()
